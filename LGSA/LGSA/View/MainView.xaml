@@ -1,0 +1,76 @@
+﻿<Window x:Class="LGSA.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LGSA.View"
+        xmlns:controls="clr-namespace:LGSA.Utility"
+        xmlns:vm="clr-namespace:LGSA.ViewModel"
+        mc:Ignorable="d"
+        Title="MainView" Height="800" Width="1000"
+        Name="MainViewWindow"
+        WindowState="Maximized">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:AuthenticationViewModel}">
+            <local:AuthenticationView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProductViewModel}">
+            <local:ProductView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BuyOfferViewModel}">
+            <local:BuyOfferView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SellOfferViewModel}">
+            <local:SellOfferView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BuyTransactionViewModel}">
+            <local:BuyTransactionView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SellTransactionViewModel}">
+            <local:SellTransactionView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ManageAccountViewModel}">
+            <local:ManageAccount/>
+        </DataTemplate>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Content="Your Products" Command="{Binding ProductVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="0"></Button>
+            <Button Content="Your Buy Offers" Command="{Binding BuyOfferVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="1"></Button>
+            <Button Content="Your Sell Offers" Command="{Binding SellOfferVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="2"></Button>
+            <Button Content="Search Buy Offers" Command="{Binding BuyTransactionVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="3"></Button>
+            <Button Content="Search Sell Offers" Command="{Binding SellTransactionVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="4"></Button>
+            <Button Content="Log Out" Command="{Binding LogoutCommand}" Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="6"></Button>
+            <Button Content="Manage Account" Command="{Binding ManageAccountVMCommand}" 
+                    Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}" Grid.Column="5"></Button>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}">
+            <controls:FilterControl DataContext="{Binding Filter}"  />
+        </Grid>
+        <Button Content="Search" Grid.Row="2" Command="{Binding SearchCommand}" 
+                Visibility="{Binding IsUserAuthenticated, Converter={StaticResource BoolToVisibility}}"/>
+        <ContentControl Content="{Binding DisplayedView}" Grid.Row="3" />
+    </Grid>
+</Window>
